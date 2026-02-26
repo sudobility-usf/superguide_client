@@ -1,0 +1,59 @@
+{
+  "name": "@sudobility/superguide_client",
+  "version": "0.0.10",
+  "description": "Client library for Starter API with TanStack Query hooks",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "bunx tsc -p tsconfig.build.json",
+    "build:watch": "bunx tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "bun run clean && bun run build",
+    "typecheck": "bunx tsc --noEmit",
+    "lint": "bunx eslint src/",
+    "lint:fix": "bunx eslint src/ --fix",
+    "format": "bunx prettier --write \"src/**/*.ts\"",
+    "format:check": "bunx prettier --check \"src/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "verify": "bun run typecheck && bun run test && bun run build"
+  },
+  "keywords": [
+    "superguide",
+    "client",
+    "react",
+    "typescript",
+    "tanstack-query"
+  ],
+  "author": "Sudobility",
+  "license": "BUSL-1.1",
+  "peerDependencies": {
+    "@sudobility/types": "^1.9.54",
+    "@tanstack/react-query": ">=5.0.0",
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@sudobility/superguide_types": "^0.0.5",
+    "@sudobility/types": "^1.9.54",
+    "@tanstack/react-query": "^5.90.5",
+    "@types/react": "^19.2.2",
+    "react": "^19.2.1",
+    "@eslint/js": "^9.38.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "globals": "^16.4.0",
+    "prettier": "^3.7.4",
+    "typescript": "~5.9.3",
+    "vitest": "^4.0.15"
+  }
+}
