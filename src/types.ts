@@ -48,4 +48,10 @@ export const QUERY_KEYS = {
   historiesTotal: () => ['starter', 'histories', 'total'] as const,
   /** Cache key for a user profile. */
   user: (userId: string) => ['starter', 'user', userId] as const,
+  /** Cache key for restaurant search results. */
+  restaurantSearch: (dish: string, location: string) =>
+    ['starter', 'restaurants', dish, location] as const,
+  /** Cache key for trip generation results. */
+  tripGenerate: (location: string, startDate: string, endDate: string) =>
+    ['starter', 'trips', location, startDate, endDate] as const,
 } as const;

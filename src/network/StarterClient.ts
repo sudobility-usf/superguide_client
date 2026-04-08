@@ -5,6 +5,10 @@ import type {
   HistoryCreateRequest,
   HistoryTotalResponse,
   HistoryUpdateRequest,
+  RestaurantSearchRequest,
+  RestaurantSearchResponse,
+  TripGenerateRequest,
+  TripGenerateResponse,
   User,
 } from '@sudobility/superguide_types';
 import type { FirebaseIdToken } from '../types';
@@ -232,6 +236,54 @@ export class StarterClient {
       headers: createAuthHeaders(token),
     });
     return validateResponse<void>(response.data, 'deleteHistory');
+  }
+
+  // --- Restaurant Search (public) ---
+
+  /**
+   * Searches for restaurants by dish and location.
+   *
+   * This is a public endpoint that does not require authentication.
+   *
+   * @param data - The search criteria (dish and location)
+   * @returns The matching restaurants wrapped in a {@link BaseResponse}
+   * @throws {Error} If the response does not match the expected shape
+   */
+  async searchRestaurants(
+    data: RestaurantSearchRequest
+  ): Promise<BaseResponse<RestaurantSearchResponse>> {
+    const url = buildUrl(this.baseUrl, '/api/v1/restaurants/search');
+    const response = await this.networkClient.post(url, data, {
+      headers: createHeaders(),
+    });
+    return validateResponse<RestaurantSearchResponse>(
+      response.data,
+      'searchRestaurants'
+    );
+  }
+
+  // --- Trips (public) ---
+
+  /**
+   * Generates a trip itinerary for a destination and date range.
+   *
+   * This is a public endpoint that does not require authentication.
+   *
+   * @param data - The trip generation request (location, start_date, end_date)
+   * @returns The generated itinerary wrapped in a {@link BaseResponse}
+   * @throws {Error} If the response does not match the expected shape
+   */
+  async generateTrip(
+    data: TripGenerateRequest
+  ): Promise<BaseResponse<TripGenerateResponse>> {
+    const url = buildUrl(this.baseUrl, '/api/v1/trips/generate');
+    const response = await this.networkClient.post(url, data, {
+      headers: createHeaders(),
+    });
+    return validateResponse<TripGenerateResponse>(
+      response.data,
+      'generateTrip'
+    );
   }
 
   // --- Total (public) ---
