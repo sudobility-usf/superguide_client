@@ -54,4 +54,6 @@ export const QUERY_KEYS = {
   /** Cache key for trip generation results. */
   tripGenerate: (location: string, startDate: string, endDate: string) =>
     ['starter', 'trips', location, startDate, endDate] as const,
+  /** Cache key for a user's saved-trips list. */
+  savedTrips: (userId: string) => ['starter', 'savedTrips', userId] as const,
 } as const;

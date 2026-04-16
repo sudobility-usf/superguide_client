@@ -9,7 +9,7 @@ import type {
   Optional,
 } from '@sudobility/superguide_types';
 import type { FirebaseIdToken } from '../types';
-import { StarterClient } from '../network/StarterClient';
+import { SuperguideClient } from '../network/SuperguideClient';
 import { DEFAULT_GC_TIME, DEFAULT_STALE_TIME, QUERY_KEYS } from '../types';
 
 const EMPTY_HISTORIES: History[] = [];
@@ -107,7 +107,7 @@ export const useHistories = (
   const enabled = (options?.enabled ?? true) && !!userId && !!token;
 
   const client = useMemo(
-    () => new StarterClient({ baseUrl, networkClient }),
+    () => new SuperguideClient({ baseUrl, networkClient }),
     [baseUrl, networkClient]
   );
 

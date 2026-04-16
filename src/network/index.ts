@@ -1,1 +1,1 @@
-export { StarterClient } from './StarterClient';
+export { SuperguideClient } from './SuperguideClient';

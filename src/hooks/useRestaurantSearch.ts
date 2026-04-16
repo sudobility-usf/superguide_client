@@ -5,7 +5,7 @@ import type {
   Optional,
   Restaurant,
 } from '@sudobility/superguide_types';
-import { StarterClient } from '../network/StarterClient';
+import { SuperguideClient } from '../network/SuperguideClient';
 import { DEFAULT_GC_TIME, DEFAULT_STALE_TIME, QUERY_KEYS } from '../types';
 
 /**
@@ -46,7 +46,7 @@ export const useRestaurantSearch = (
   const enabled = (options?.enabled ?? true) && !!dish && !!location;
 
   const client = useMemo(
-    () => new StarterClient({ baseUrl, networkClient }),
+    () => new SuperguideClient({ baseUrl, networkClient }),
     [baseUrl, networkClient]
   );
 
