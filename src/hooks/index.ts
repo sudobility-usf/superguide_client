@@ -11,3 +11,4 @@ export {
   useGenerateTrip,
   type UseGenerateTripReturn,
 } from './useGenerateTrip';
+export { useSavedTrips, type UseSavedTripsReturn } from './useSavedTrips';

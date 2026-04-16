@@ -3,4 +3,4 @@ export {
   createHeaders,
   buildUrl,
   handleApiError,
-} from './starter-helpers';
+} from './superguide-helpers';

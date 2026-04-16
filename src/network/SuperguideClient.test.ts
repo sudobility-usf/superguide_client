@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { StarterClient } from './StarterClient';
+import { SuperguideClient } from './SuperguideClient';
 import type { NetworkClient } from '@sudobility/types';
 
 function createMockNetworkClient(
@@ -14,19 +14,19 @@ function createMockNetworkClient(
   };
 }
 
-describe('StarterClient', () => {
+describe('SuperguideClient', () => {
   const baseUrl = 'https://api.example.com';
   let mockNetworkClient: NetworkClient;
-  let client: StarterClient;
+  let client: SuperguideClient;
 
   beforeEach(() => {
     mockNetworkClient = createMockNetworkClient();
-    client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+    client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
   });
 
   describe('constructor', () => {
     it('should create a client instance', () => {
-      expect(client).toBeInstanceOf(StarterClient);
+      expect(client).toBeInstanceOf(SuperguideClient);
     });
   });
 
@@ -56,7 +56,7 @@ describe('StarterClient', () => {
         timestamp: '2024-01-01T00:00:00Z',
       };
       mockNetworkClient = createMockNetworkClient(userData);
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       const result = await client.getUser('user-123', 'token');
       expect(result.success).toBe(true);
@@ -65,7 +65,7 @@ describe('StarterClient', () => {
 
     it('should throw on invalid response shape', async () => {
       mockNetworkClient = createMockNetworkClient('not an object');
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       await expect(client.getUser('user-123', 'token')).rejects.toThrow(
         'Invalid API response for getUser'
@@ -161,7 +161,7 @@ describe('StarterClient', () => {
 
   describe('URL construction', () => {
     it('should strip trailing slash from baseUrl', async () => {
-      const trailingSlashClient = new StarterClient({
+      const trailingSlashClient = new SuperguideClient({
         baseUrl: 'https://api.example.com/',
         networkClient: mockNetworkClient,
       });
@@ -181,7 +181,7 @@ describe('StarterClient', () => {
         timestamp: '2024-01-01T00:00:00Z',
       };
       mockNetworkClient = createMockNetworkClient(validResponse);
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       const result = await client.getHistoriesTotal();
       expect(result.success).toBe(true);
@@ -195,7 +195,7 @@ describe('StarterClient', () => {
         timestamp: '2024-01-01T00:00:00Z',
       };
       mockNetworkClient = createMockNetworkClient(errorResponse);
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       const result = await client.getHistoriesTotal();
       expect(result.success).toBe(false);
@@ -204,7 +204,7 @@ describe('StarterClient', () => {
 
     it('should throw on null response data', async () => {
       mockNetworkClient = createMockNetworkClient(null);
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       await expect(client.getHistoriesTotal()).rejects.toThrow(
         'Invalid API response for getHistoriesTotal'
@@ -213,7 +213,7 @@ describe('StarterClient', () => {
 
     it('should throw on primitive string response data', async () => {
       mockNetworkClient = createMockNetworkClient('raw string');
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       await expect(client.getHistoriesTotal()).rejects.toThrow(
         'Invalid API response for getHistoriesTotal'
@@ -222,7 +222,7 @@ describe('StarterClient', () => {
 
     it('should throw on response missing success field', async () => {
       mockNetworkClient = createMockNetworkClient({ data: 'some data' });
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       await expect(client.getHistoriesTotal()).rejects.toThrow(
         'Invalid API response for getHistoriesTotal'
@@ -231,7 +231,7 @@ describe('StarterClient', () => {
 
     it('should throw on response with non-boolean success field', async () => {
       mockNetworkClient = createMockNetworkClient({ success: 'yes', data: {} });
-      client = new StarterClient({ baseUrl, networkClient: mockNetworkClient });
+      client = new SuperguideClient({ baseUrl, networkClient: mockNetworkClient });
 
       await expect(client.getHistoriesTotal()).rejects.toThrow(
         'Invalid API response for getHistoriesTotal'

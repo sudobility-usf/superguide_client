@@ -4,9 +4,9 @@ import {
   createHeaders,
   buildUrl,
   handleApiError,
-} from './starter-helpers';
+} from './superguide-helpers';
 
-describe('starter-helpers', () => {
+describe('superguide-helpers', () => {
   describe('createAuthHeaders', () => {
     it('should include Authorization Bearer token', () => {
       const headers = createAuthHeaders('my-token-123');

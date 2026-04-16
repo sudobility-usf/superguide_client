@@ -7,6 +7,8 @@ import type {
   HistoryUpdateRequest,
   RestaurantSearchRequest,
   RestaurantSearchResponse,
+  Trip,
+  TripCreateRequest,
   TripGenerateRequest,
   TripGenerateResponse,
   User,
@@ -16,7 +18,7 @@ import {
   buildUrl,
   createAuthHeaders,
   createHeaders,
-} from '../utils/starter-helpers';
+} from '../utils/superguide-helpers';
 
 /**
  * Validates that a response from the API conforms to the expected {@link BaseResponse} shape.
@@ -49,16 +51,16 @@ function validateResponse<T>(
 }
 
 /**
- * HTTP client for the Starter API.
+ * HTTP client for the Superguide API.
  *
- * Communicates with the Starter backend using dependency-injected {@link NetworkClient}.
+ * Communicates with the Superguide backend using dependency-injected {@link NetworkClient}.
  * All HTTP calls go through the injected `networkClient` -- this class never uses `fetch` directly.
  *
  * @example
  * ```typescript
- * import { StarterClient } from '@sudobility/superguide_client';
+ * import { SuperguideClient } from '@sudobility/superguide_client';
  *
- * const client = new StarterClient({
+ * const client = new SuperguideClient({
  *   baseUrl: 'https://api.example.com',
  *   networkClient: myNetworkClient,
  * });
@@ -70,15 +72,15 @@ function validateResponse<T>(
  * const histories = await client.getHistories(userId, idToken);
  * ```
  */
-export class StarterClient {
+export class SuperguideClient {
   private readonly baseUrl: string;
   private readonly networkClient: NetworkClient;
 
   /**
-   * Creates a new StarterClient instance.
+   * Creates a new SuperguideClient instance.
    *
    * @param config - Client configuration
-   * @param config.baseUrl - The base URL of the Starter API (e.g., `"https://api.example.com"`)
+   * @param config.baseUrl - The base URL of the Superguide API (e.g., `"https://api.example.com"`)
    * @param config.networkClient - A {@link NetworkClient} implementation for making HTTP requests
    */
   constructor(config: { baseUrl: string; networkClient: NetworkClient }) {
@@ -255,6 +257,9 @@ export class StarterClient {
     const url = buildUrl(this.baseUrl, '/api/v1/restaurants/search');
     const response = await this.networkClient.post(url, data, {
       headers: createHeaders(),
+      // ShapeShyft → OpenAI can take 30-60s; override the default 10s timeout
+      // some NetworkClient implementations apply.
+      timeout: 90_000,
     });
     return validateResponse<RestaurantSearchResponse>(
       response.data,
@@ -279,11 +284,81 @@ export class StarterClient {
     const url = buildUrl(this.baseUrl, '/api/v1/trips/generate');
     const response = await this.networkClient.post(url, data, {
       headers: createHeaders(),
+      // ShapeShyft → OpenAI can take 30-60s; override the default 10s timeout
+      // some NetworkClient implementations apply.
+      timeout: 90_000,
     });
     return validateResponse<TripGenerateResponse>(
       response.data,
       'generateTrip'
     );
+  }
+
+  // --- Saved Trips (authenticated, per-user) ---
+
+  /**
+   * Lists the authenticated user's saved trips, newest first.
+   */
+  async listTrips(
+    userId: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<Trip[]>> {
+    const url = buildUrl(this.baseUrl, `/api/v1/users/${userId}/trips`);
+    const response = await this.networkClient.get(url, {
+      headers: createAuthHeaders(token),
+    });
+    return validateResponse<Trip[]>(response.data, 'listTrips');
+  }
+
+  /**
+   * Saves a newly generated trip for the authenticated user.
+   */
+  async createTrip(
+    userId: string,
+    data: TripCreateRequest,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<Trip>> {
+    const url = buildUrl(this.baseUrl, `/api/v1/users/${userId}/trips`);
+    const response = await this.networkClient.post(url, data, {
+      headers: createAuthHeaders(token),
+    });
+    return validateResponse<Trip>(response.data, 'createTrip');
+  }
+
+  /**
+   * Fetches a single saved trip by id.
+   */
+  async getTrip(
+    userId: string,
+    tripId: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<Trip>> {
+    const url = buildUrl(
+      this.baseUrl,
+      `/api/v1/users/${userId}/trips/${tripId}`
+    );
+    const response = await this.networkClient.get(url, {
+      headers: createAuthHeaders(token),
+    });
+    return validateResponse<Trip>(response.data, 'getTrip');
+  }
+
+  /**
+   * Deletes a saved trip.
+   */
+  async deleteTrip(
+    userId: string,
+    tripId: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<void>> {
+    const url = buildUrl(
+      this.baseUrl,
+      `/api/v1/users/${userId}/trips/${tripId}`
+    );
+    const response = await this.networkClient.delete(url, {
+      headers: createAuthHeaders(token),
+    });
+    return validateResponse<void>(response.data, 'deleteTrip');
   }
 
   // --- Total (public) ---

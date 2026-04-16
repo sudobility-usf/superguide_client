@@ -7,7 +7,7 @@ import type {
   TripGenerateRequest,
   TripGenerateResponse,
 } from '@sudobility/superguide_types';
-import { StarterClient } from '../network/StarterClient';
+import { SuperguideClient } from '../network/SuperguideClient';
 
 /**
  * Return type for the {@link useGenerateTrip} hook.
@@ -40,7 +40,7 @@ export const useGenerateTrip = (
   baseUrl: string,
 ): UseGenerateTripReturn => {
   const client = useMemo(
-    () => new StarterClient({ baseUrl, networkClient }),
+    () => new SuperguideClient({ baseUrl, networkClient }),
     [baseUrl, networkClient]
   );
 
