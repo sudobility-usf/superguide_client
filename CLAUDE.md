@@ -97,3 +97,11 @@ Dependency injection is central: `NetworkClient` interface is provided by the co
 - The `QUERY_KEYS` factory must be kept in sync with API route changes -- if a route path changes, update the corresponding key
 - This is a published npm package (`@sudobility/superguide_client`) -- breaking changes require version bumps and coordination with consumers
 
+## Task Workflow
+
+- Read `plans/ACTIVE_TASK.md` before starting work.
+- If `plans/ACTIVE_TASK.md` says `idle`, do not self-assign from the backlog.
+- Use `plans/STATUS.md` for progress notes, blockers, verification results, and handoff context.
+- Use `plans/WORK_QUEUE.md` for backlog management only; keep the live assignment in `plans/ACTIVE_TASK.md`.
+- Treat `plans/IMPROVEMENTS.md` as reference material, not the source of truth for the current assignment.
+- Assume only one active task in this repo unless `plans/ACTIVE_TASK.md` explicitly says otherwise.
